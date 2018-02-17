@@ -1,3 +1,1 @@
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/keamas/Azure-custom-JSON-templates/master/azuredeploy-VNET-UDR.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fkeamas%2FAzure-custom-JSON-templates%2Fmaster%2Fazuredeploy-VNET-UDR.json%0A" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>
