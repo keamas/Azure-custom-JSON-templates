@@ -1,0 +1,105 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VNET-NamePrefix": {
+      "type": "string",
+      "defaultValue": "KTC-916-VNET-DevServers",
+      "metadata": {
+        "description": "The name prefix of the VNET that you wish to create."
+      }
+    },
+    "SUBNET-NamePrefix": {
+      "type": "string",
+      "defaultValue": "KTC-916-SUB-DevServers-1",
+      "metadata": {
+        "description": "The name prefix of the Subnet that you wish to create."
+      }
+    },
+    "VNET-Network": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16",
+      "metadata": {
+        "description": "The Network of the VNET that you wish to create."
+      }
+    },
+    "SUBNET-Network": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24",
+      "metadata": {
+        "description": "The Subnet of the VNET that you wish to create."
+      }
+    },
+    "ROUTING-Table": {
+      "type": "string",
+      "defaultValue": "KTC-916-RT-DevServers",
+      "metadata": {
+        "description": "The Routing Table of the Subnet that you wish to create."
+      }
+    },
+    "ROUTING-GW": {
+      "type": "string",
+      "defaultValue": "10.64.2.36",
+      "metadata": {
+        "description": "The Routing Gateway of the Subnet that you wish to create."
+      }
+    }
+  },
+  "variables": {
+    "VNET-Name": "[concat(parameters('VNET-NamePrefix'))]",
+    "VNET-NamePrefix": "[concat(parameters('VNET-Network'))]",
+    "VNET-NameSubnet1Name": "[concat(parameters('SUBNET-NamePrefix'))]",
+    "VNET-NameSubnet1Prefix": "[concat(parameters('SUBNET-Network'))]",
+    "RT-Name": "[concat(parameters('ROUTING-Table'))]",
+    "GW-IP": "[concat(parameters('ROUTING-GW'))]"
+
+  },
+  "resources": [
+    {
+      "name": "[variables('VNET-Name')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[variables('VNET-Name')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('VNET-NamePrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('VNET-NameSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNET-NameSubnet1Prefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('RT-Name')]",
+      "type": "Microsoft.Network/routeTables",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "scale": null,
+      "properties": {
+        "disableBgpRoutePropagation": false,
+        "routes": [
+          {
+            "name": "default",
+            "properties": {
+              "addressPrefix": "0.0.0.0/0",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "[variables('GW-IP')]"
+            }
+          }
+        ]
+      }
+    }
+      ],
+      "outputs": {}
+    }
